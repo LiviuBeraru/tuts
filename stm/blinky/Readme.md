@@ -1,6 +1,6 @@
 This is a simple "blinky" example using the Standard Peripheral Library for
 [STM32F4 Discovery board](http://www.st.com/web/catalog/tools/FM116/SC959/SS1532/PF252419).
-It is intended for Linux users and accompanies
+It is intended mainly for Linux users and accompanies
 [this](http://liviube.wordpress.com/2013/04/21/blink-for-stm32f4-discovery-board-on-archlinux-with-makefiles)
 article.
 
@@ -17,19 +17,23 @@ Here is an overview of the files found in this project:
 * Makefile: commented makefile used to compile the blinky project.
   You can use this file to see how the whole compilation process works and how
   to use the tools.
-* main.c: this is the actual program.
-* stm32\_flash.ld: linker script provided by ST.
+* main.c: this is the actual program (with comments).
+* stm32\_flash.ld: linker script provided by ST. Contains a description of the
+  memory layout used by the Cortex-M4.
 * stm32f4xx\_conf.h: this file is used to include the header files of the
-  standard peripheral library. You could include those headers directly in
-  main.c, but the peripheral library includes this configuration header,
-  so we must provide it - or else we cannot compile our code.
-  The files is provided by ST.
-* system\_stm32f4xx.c: implements intialization code called from the startup file.
+  standard peripheral library. It is a configuration file.
+  You could include those headers directly in
+  main.c, but the peripheral library includes this configuration header
+  (stm32f4xx.h includes it conditionally),
+  so we must provide it - or else we cannot compile our code against the library.
+  This file is provided by ST and is supposed to be adapted to every project.
+* system\_stm32f4xx.c: implements intialization code called from the startup file
+  startup\_stm32f4xx.s (present in the library).
   This file is provided by ST.
 
 #### Missing files ####
 
-This repository does not include the peripheral library used to build the
+This project does not include the peripheral library used to build the
 program. You can however download the library from ST (see link below).
 In my setup I have extracted the library in a folder one level above the
 "blinky" folder. That is I have the following directory structure:
@@ -97,9 +101,9 @@ In my setup I have extracted the library in a folder one level above the
 
   [http://www.st.com/web/en/catalog/tools/PF257904](http://www.st.com/web/en/catalog/tools/PF257904)
 
-  Actually you don't really *need* this library, but without it you must know 
+  Actually you don't *really need* this library, but without it you must know 
   the exact memory mapping of all peripherals and the library's headers contain
-  symbolic definitions for these memory addresses. They also contain useful
+  symbolic definitions for these memory addresses. It also contains useful
   functions which you don't really want to write on your own.
 
 

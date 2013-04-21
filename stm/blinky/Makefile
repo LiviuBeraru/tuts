@@ -71,9 +71,9 @@ INCLUDE = $(addprefix -I,$(INC_DIRS))
 
 # #defines needed when working with the STM library
 DEFS    = -DUSE_STDPERIPH_DRIVER
-# if you use this option, you must implement the function 
+# if you use the following option, you must implement the function 
 #    assert_failed(uint8_t* file, uint32_t line)
-# because it it is used in the library
+# because it is conditionally used in the library
 # DEFS   += -DUSE_FULL_ASSERT
 
 ## Compiler options

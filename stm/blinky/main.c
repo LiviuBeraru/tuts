@@ -40,9 +40,9 @@
  */
 #define LEDS_GPIO_PORT (GPIOD)
 
-/* This array stores the led order when they are turned on.
+/* This array stores the led order used to switch them on and off.
  * We use this order by iterating over the array.
- * LEDn is the number of leds on the discovery board
+ * LEDn is the number of user leds on the discovery board
  * and is defined in stm32f4_discovery.h.
  */
 static uint16_t leds[LEDn] = {GREEN, ORANGE, RED, BLUE};
@@ -67,6 +67,7 @@ static void delay(__IO uint32_t nCount)
 
 /* Initialize the GPIOD port.
  * See also the comments beginning stm32f4xx_gpio.c
+ * (found in the library)
  */
 static void setup_leds(void)
 {
@@ -99,11 +100,11 @@ static void setup_leds(void)
      * mapped to GPIO device port D, where the led pins
      * are connected */
     GPIO_Init(LEDS_GPIO_PORT, &GPIO_InitStructure);
-    /*
-     * This call resolves in
+    /* This call resolves in
      * GPIO_Init((GPIO_TypeDef *) 0X40020C00, &GPIO_InitStructure)
      * where 0X40020C00 is the memory address mapped to
-     * the GPIOD port. */
+     * the GPIOD port. Without the library we would have to know all
+     * these memory addresses. */
 }
 
 /* Turn on the color leds one after another.
@@ -115,8 +116,9 @@ static void setup_leds(void)
  * how this works.
  * Basically, this works by using the memory map mechanism of the
  * Cortex-M4: the pins of the GPIO port D are mapped to special
- * addresses which these function write to. The exact addresses are
- * represented by the fields of the GPIO_TypeDef structure.
+ * memory addresses which these function write to.
+ * The exact addresses are represented by the fields of the
+ * GPIO_TypeDef structure (that is by their offsets).
  * See also the structure GPIO_TypeDef in stm32f4xx.h.
  */
 static void led_round(void)
@@ -133,26 +135,36 @@ static void led_round(void)
     }
 }
 
-static void flash_all(void)
+/* Turn all leds on and off 4 times. */
+static void flash_all_leds(void)
 {
     int i;
     for (i = 0; i < 4; i++)
     {
+        /* Turn on all user leds */
         GPIO_SetBits(LEDS_GPIO_PORT, ALL_LEDS);
+        /* Wait a short time */
         delay(PAUSE_SHORT);
+        /* Turn off all leds */
         GPIO_ResetBits(LEDS_GPIO_PORT, ALL_LEDS);
+        /* Wait again before looping */
         delay(PAUSE_SHORT);
     }
 }
 
+/* Main function, the entry point of this program.
+ * The main function is called from the startup code in file
+ * Libraries/CMSIS/ST/STM32F4xx/Source/Templates/TrueSTUDIO/startup_stm32f4xx.s
+ * (line 101)
+ */
 int main(void)
 {
     setup_leds();
     while (1)
     {
         led_round();
-        flash_all();
+        flash_all_leds();
     }
 
-    return 0;
+    return 0; // never returns actually
 }
