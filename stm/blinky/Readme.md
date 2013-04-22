@@ -1,7 +1,7 @@
 This is a simple "blinky" example using the Standard Peripheral Library for
 [STM32F4 Discovery board](http://www.st.com/web/catalog/tools/FM116/SC959/SS1532/PF252419).
 It is intended mainly for Linux users and accompanies
-[this](http://liviube.wordpress.com/2013/04/21/blink-for-stm32f4-discovery-board-on-archlinux-with-makefiles)
+[this](http://liviube.wordpress.com/2013/04/22/blink-for-stm32f4-discovery-board-on-linux-with-makefile/)
 article.
 
 
