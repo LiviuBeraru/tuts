@@ -20,3 +20,5 @@ As in the
 the standard peripherals library is not included because it can be downloaded 
 from ST. The makefile supposes the library is located one level above the 
 directory containing this code.
+
+This example was tested on Archlinux only.
